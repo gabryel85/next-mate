@@ -23,7 +23,7 @@
 
 ```
 datasource db {
-  provider = "postgresql" 
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -88,16 +88,15 @@ import { PrismaClient } from '@prisma/client';
 let prisma;
 
 if (process.env.NODE_ENV === 'production') {
-  prisma = new PrismaClient();
+	prisma = new PrismaClient();
 } else {
-  if (!global.prisma) {
-    global.prisma = new PrismaClient();
-  }
-  prisma = global.prisma;
+	if (!global.prisma) {
+		global.prisma = new PrismaClient();
+	}
+	prisma = global.prisma;
 }
 
 export { prisma };
-
 ```
 
 > [!info]
@@ -130,12 +129,11 @@ export { prisma };
 \dt
 ```
 
-> [!success]
-> **Wygeneruj tabele w bazie danych**: Uruchom **`npx prisma migrate dev --name init`** w terminalu w głównym katalogu projektu, aby zastosować schemat do bazy danych.
+> [!success] > **Wygeneruj tabele w bazie danych**: Uruchom **`npx prisma migrate dev --name init`** w terminalu w głównym katalogu projektu, aby zastosować schemat do bazy danych.
 
 ## Użycie skryptu seedującego Prisma
 
-1. **Utwórz skrypt seedujący**: W katalogu głównym projektu utwórz plik seed, np. **`prisma/seed.js`**  który będzie zawierał logikę dodawania startowych danych do bazy.
+1. **Utwórz skrypt seedujący**: W katalogu głównym projektu utwórz plik seed, np. **`prisma/seed.js`** który będzie zawierał logikę dodawania startowych danych do bazy.
 2. **Dodaj logikę seedującą**: W pliku seedowym, użyj Prisma Client do dodania danych do tabel.&#x20;
 
 ```javascript
@@ -143,62 +141,62 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 async function main() {
-  const user1 = await prisma.user.create({
-    data: {
-      name: 'Alice',
-      email: 'alice@example.com',
-    },
-  });
+	const user1 = await prisma.user.create({
+		data: {
+			name: 'Alice',
+			email: 'alice@example.com',
+		},
+	});
 
-  const user2 = await prisma.user.create({
-    data: {
-      name: 'Bob',
-      email: 'bob@example.com',
-    },
-  });
+	const user2 = await prisma.user.create({
+		data: {
+			name: 'Bob',
+			email: 'bob@example.com',
+		},
+	});
 
-  const statusActive = await prisma.status.create({
-    data: {
-      name: 'Active',
-    },
-  });
+	const statusActive = await prisma.status.create({
+		data: {
+			name: 'Active',
+		},
+	});
 
-  const statusCompleted = await prisma.status.create({
-    data: {
-      name: 'Completed',
-    },
-  });
+	const statusCompleted = await prisma.status.create({
+		data: {
+			name: 'Completed',
+		},
+	});
 
-  // Tworzenie zadań (todos)
-  const todo1 = await prisma.todo.create({
-    data: {
-      title: 'Finish Prisma setup',
-      content: 'Make sure Prisma is fully set up and ready to go.',
-      userId: user1.id,
-      statusId: statusActive.id,
-    },
-  });
+	// Tworzenie zadań (todos)
+	const todo1 = await prisma.todo.create({
+		data: {
+			title: 'Finish Prisma setup',
+			content: 'Make sure Prisma is fully set up and ready to go.',
+			userId: user1.id,
+			statusId: statusActive.id,
+		},
+	});
 
-  const todo2 = await prisma.todo.create({
-    data: {
-      title: 'Learn Next.js',
-      content: 'Follow the official Next.js tutorial to understand the basics.',
-      userId: user2.id,
-      statusId: statusCompleted.id,
-    },
-  });
+	const todo2 = await prisma.todo.create({
+		data: {
+			title: 'Learn Next.js',
+			content: 'Follow the official Next.js tutorial to understand the basics.',
+			userId: user2.id,
+			statusId: statusCompleted.id,
+		},
+	});
 
-  console.log({ user1, user2, statusActive, statusCompleted, todo1, todo2 });
+	console.log({ user1, user2, statusActive, statusCompleted, todo1, todo2 });
 }
 
 main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+	.catch(e => {
+		console.error(e);
+		process.exit(1);
+	})
+	.finally(async () => {
+		await prisma.$disconnect();
+	});
 ```
 
 **Dodaj skrypt do package.json**: Aby łatwo uruchamiać skrypt seedujący, możesz dodać skrypt do pliku **`package.json`**:
@@ -269,34 +267,33 @@ Każdy plik w katalogu **`api`** będzie obsługiwał różne żądania HTTP zwi
 import { prisma } from '@/lib/prisma';
 
 export async function get(req, res) {
-  const todos = await prisma.todo.findMany();
-  res.status(200).json(todos);
+	const todos = await prisma.todo.findMany();
+	res.status(200).json(todos);
 }
 
 export async function post(req, res) {
-  const { title, content, userId, statusId } = req.body;
-  const newTodo = await prisma.todo.create({
-    data: {
-      title,
-      content,
-      userId,
-      statusId,
-    },
-  });
-  res.status(201).json(newTodo);
+	const { title, content, userId, statusId } = req.body;
+	const newTodo = await prisma.todo.create({
+		data: {
+			title,
+			content,
+			userId,
+			statusId,
+		},
+	});
+	res.status(201).json(newTodo);
 }
 
 export default function handler(req, res) {
-  if (req.method === 'GET') {
-    get(req, res);
-  } else if (req.method === 'POST') {
-    post(req, res);
-  } else {
-    res.setHeader('Allow', ['GET', 'POST']);
-    res.status(405).end(`Method ${req.method} Not Allowed`);
-  }
+	if (req.method === 'GET') {
+		get(req, res);
+	} else if (req.method === 'POST') {
+		post(req, res);
+	} else {
+		res.setHeader('Allow', ['GET', 'POST']);
+		res.status(405).end(`Method ${req.method} Not Allowed`);
+	}
 }
-
 ```
 
 **`pages/api/todos/[id].js`**
@@ -306,53 +303,53 @@ import { prisma } from '@/lib/prisma';
 
 // GET api/todos/:id
 export async function get(req, res) {
-  const { id } = req.query;
-  const todo = await prisma.todo.findUnique({
-    where: { id: parseInt(id) },
-  });
-  res.status(200).json(todo);
+	const { id } = req.query;
+	const todo = await prisma.todo.findUnique({
+		where: { id: parseInt(id) },
+	});
+	res.status(200).json(todo);
 }
 
 // PUT api/todos/:id
 export async function put(req, res) {
-  const { id } = req.query;
-  const { title, content, userId, statusId } = req.body;
-  const updatedTodo = await prisma.todo.update({
-    where: { id: parseInt(id) },
-    data: {
-      title,
-      content,
-      userId,
-      statusId,
-    },
-  });
-  res.status(200).json(updatedTodo);
+	const { id } = req.query;
+	const { title, content, userId, statusId } = req.body;
+	const updatedTodo = await prisma.todo.update({
+		where: { id: parseInt(id) },
+		data: {
+			title,
+			content,
+			userId,
+			statusId,
+		},
+	});
+	res.status(200).json(updatedTodo);
 }
 
 // DELETE api/todos/:id
 export async function del(req, res) {
-  const { id } = req.query;
-  await prisma.todo.delete({
-    where: { id: parseInt(id) },
-  });
-  res.status(204).end();
+	const { id } = req.query;
+	await prisma.todo.delete({
+		where: { id: parseInt(id) },
+	});
+	res.status(204).end();
 }
 
 export default function handler(req, res) {
-  switch (req.method) {
-    case 'GET':
-      get(req, res);
-      break;
-    case 'PUT':
-      put(req, res);
-      break;
-    case 'DELETE':
-      del(req, res);
-      break;
-    default:
-      res.setHeader('Allow', ['GET', 'PUT', 'DELETE']);
-      res.status(405).end(`Method ${req.method} Not Allowed`);
-  }
+	switch (req.method) {
+		case 'GET':
+			get(req, res);
+			break;
+		case 'PUT':
+			put(req, res);
+			break;
+		case 'DELETE':
+			del(req, res);
+			break;
+		default:
+			res.setHeader('Allow', ['GET', 'PUT', 'DELETE']);
+			res.status(405).end(`Method ${req.method} Not Allowed`);
+	}
 }
 ```
 
@@ -398,7 +395,6 @@ export default async function handler(req, res) {
 		res.status(405).end(`Method ${req.method} Not Allowed`);
 	}
 }
-
 ```
 
 > [!success]
@@ -414,13 +410,13 @@ export default async function handler(req, res) {
 
 ```javascript
 export async function get(req, res) {
-    const todos = await prisma.todo.findMany({
-        include: {
-            user: true,
-            status: true,
-        },
-    });
-    res.status(200).json(todos);
+	const todos = await prisma.todo.findMany({
+		include: {
+			user: true,
+			status: true,
+		},
+	});
+	res.status(200).json(todos);
 }
 ```
 
@@ -489,7 +485,6 @@ export default function Home() {
 		</div>
 	);
 }
-
 ```
 
 <br>
@@ -554,43 +549,42 @@ import useSWR from 'swr';
 import Head from 'next/head';
 
 // Funkcja do pobierania danych po stronie klienta (opcjonalnie, jeśli potrzebujesz aktualizacji w czasie rzeczywistym)
-const fetcher = (url) => fetch(url).then((res) => res.json());
+const fetcher = url => fetch(url).then(res => res.json());
 
 export default function TodoDetails({ todo }) {
-  // Użyj SWR do aktualizacji danych w czasie rzeczywistym, jeśli jest to wymagane
-  const { data } = useSWR(`/api/todos/${todo.id}`, fetcher, { initialData: todo });
+	// Użyj SWR do aktualizacji danych w czasie rzeczywistym, jeśli jest to wymagane
+	const { data } = useSWR(`/api/todos/${todo.id}`, fetcher, { initialData: todo });
 
-  return (
-    <>
-      <Head>
-        <title>{data.title}</title>
-      </Head>
-      <div className="container mx-auto p-4">
-        <h1 className="text-2xl font-bold mb-4">{data.title}</h1>
-        <p>{data.content}</p>
-        <p className="mt-2">Status: {data.status.name}</p>
-        <p>Assigned to: {data.user.name}</p>
-      </div>
-    </>
-  );
+	return (
+		<>
+			<Head>
+				<title>{data.title}</title>
+			</Head>
+			<div className='container mx-auto p-4'>
+				<h1 className='text-2xl font-bold mb-4'>{data.title}</h1>
+				<p>{data.content}</p>
+				<p className='mt-2'>Status: {data.status.name}</p>
+				<p>Assigned to: {data.user.name}</p>
+			</div>
+		</>
+	);
 }
 
 // SSR: Ładowanie danych zadania po stronie serwera
 export async function getServerSideProps(context) {
-  const { id } = context.params;
-  const todo = await prisma.todo.findUnique({
-    where: { id: parseInt(id) },
-    include: {
-      user: true,
-      status: true,
-    },
-  });
+	const { id } = context.params;
+	const todo = await prisma.todo.findUnique({
+		where: { id: parseInt(id) },
+		include: {
+			user: true,
+			status: true,
+		},
+	});
 
-  return {
-    props: { todo: JSON.parse(JSON.stringify(todo)) },
-  };
+	return {
+		props: { todo: JSON.parse(JSON.stringify(todo)) },
+	};
 }
-
 ```
 
 <br>
@@ -706,7 +700,6 @@ export default function TodoForm({ onSubmit, initialData = {} }) {
 		</div>
 	);
 }
-
 ```
 
 ### Strona szczegółów zadania (pages/todos/\[id].js)
@@ -722,8 +715,14 @@ export default function TodoDetails({ todo }) {
 	const router = useRouter();
 
 	const handleSubmit = async data => {
-		await axios.put(`api/todos/${todo.id}`, data);
-		router.push('/');
+		await fetch(`/api/todos/${todo.id}`, {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(data),
+		});
+		router.push('/todos');
 	};
 
 	return (
@@ -742,20 +741,19 @@ export async function getServerSideProps({ params }) {
 		props: { todo },
 	};
 }
-
 ```
 
 ### Strona dodawania nowego zadania (pages/todos/new.js)
 
 ```javascript
-import TodoForm from '../../components/TodoForm';
+import TodoForm from '@/components/TodoForm';
 import { useRouter } from 'next/router';
 
 export default function NewTodo() {
 	const router = useRouter();
 
 	const handleSubmit = async data => {
-		await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/todos`, {
+		await fetch(`/api/todos`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -772,7 +770,6 @@ export default function NewTodo() {
 		</div>
 	);
 }
-
 ```
 
 <br>

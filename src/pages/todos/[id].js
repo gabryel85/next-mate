@@ -6,8 +6,14 @@ export default function TodoDetails({ todo }) {
 	const router = useRouter();
 
 	const handleSubmit = async data => {
-		await axios.put(`api/todos/${todo.id}`, data);
-		router.push('/');
+		await fetch(`/api/todos/${todo.id}`, {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(data),
+		});
+		router.push('/todos');
 	};
 
 	return (

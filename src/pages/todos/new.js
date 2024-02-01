@@ -1,11 +1,11 @@
-import TodoForm from '../../components/TodoForm';
+import TodoForm from '@/components/TodoForm';
 import { useRouter } from 'next/router';
 
 export default function NewTodo() {
 	const router = useRouter();
 
 	const handleSubmit = async data => {
-		await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/todos`, {
+		await fetch(`/api/todos`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
